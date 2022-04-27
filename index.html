@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+
+  <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1" />
+  <meta http-equiv="Expires" content="0">
+  <meta http-equiv="Last-Modified" content="0">
+  <meta http-equiv="expires" content="3600"/>
+
+  <title>Encuestas de Cursos</title>
+  <meta name="description" content="Sistema Automatizado de Encuestas Fiubenses" />
+  <link rel="icon" type="image/png" href="img/DOLLY_imagen.png">
+  <link rel=”canonical” href=”https://dollyfiuba.com/” />
+
+  <meta property="og:title" content="Dolly" />
+  <meta property="og:description" content="Sistema Automatizado de Encuestas Fiubenses" />
+  <meta property="og:image" content="https://dollyfiuba.com/img/DOLLY_imagen.png" />
+  <meta property="og:url" content="https://dollyfiuba.com/" />
+
+  <link rel="stylesheet" href="./css/bootstrap.min.css"./>
+  <link rel="stylesheet" href="./css/grid-radio.css"./>
+  <script src="./js/jquery-3.3.1.min.js"></script>
+  <script src="./js/jquery.scrollTo.min.js"></script>
+  <script src="./js/popper.min.js"></script>
+  <script src="./js/bootstrap.min.js"></script>
+
+  <!-- bootstrap-select -->
+  <link rel="stylesheet" href="./css/bootstrap-select.min.css">
+  <script src="./js/bootstrap-select.min.js"></script>
+  <script src="./js/i18n/defaults-es_ES.min.js"></script>
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/7a4568edcb.js" crossorigin="anonymous"></script>
+
+  <!-- custom -->
+  <link rel="stylesheet" href="./css/custom.css"./>
+  <!-- Dark Mode -->
+  <link rel="stylesheet" href="./css/dark-mode.css">
+
+  <!-- Scripts -->
+  <script src="./js/config.js"></script>
+  <script src="./js/utils.js"></script>
+  <script src="./js/form_mannager.js"></script>
+  <script src="./js/questions.js"></script>
+  <script src="./js/pool.js"></script>
+  <script src="./js/change_docentes.js"></script>
+  <script src="./js/equivalency.js"></script>
+
+  <!-- Recaptcha -->
+  <script src="https://www.google.com/recaptcha/api.js?render=6LdWusgZAAAAAH-x463_45udzKmTpyy8DO6t5tpi"></script>
+
+  <meta name="theme-color" content="#ffffff">
+  <meta name="mobile-web-app-capable" content="yes">
+
+</head>
+<body>
+	<!-- Navigation -->
+	<nav class="navbar sticky-top navbar-expand-sm navbar-light bg-light">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="/">
+				<img style="width: 35px; height: 35px"  src="./img/DOLLY_imagen.png" width="100">
+				<img style="height: 35px" src="./img/DOLLY_LOGO.png" ></img>
+			</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item active">
+						<a href="/" class="nav-link"><i class="fas fa-chart-bar fa-fw"></i> Cargar encuesta</a>
+					</li>
+					<li class="nav-item">
+						<a href="resultados.html" class="nav-link"><i class="fas fa-users fa-fw"></i> Resultados por <b>CURSO</b></a>
+					</li>
+					<li class="nav-item">
+						<a href="resultados_old.html" class="nav-link"><i class="fas fa-user-graduate fa-fw"></i> Resultados por <b>DOCENTE</b></a>
+					</li>
+<!--					<li class="nav-item">-->
+<!--						<a href="https://fede.dm/FIUBA-Plan/" target="_blank" class="nav-link"><i class="far fa-calendar-alt fa-fw"></i> Organizador de Horarios</a>-->
+<!--					</li>-->
+<!--					<li class="nav-item">-->
+<!--						<a href="#" class="nav-link" data-toggle="modal" data-target="#modal-dolly-programa"><i class="far fa-question-circle fa-fw"></i></a>-->
+<!--					</li>-->
+				</ul>
+<!--				<div class="custom-control custom-switch">-->
+<!--					<input type="checkbox" class="custom-control-input" id="darkSwitch">-->
+<!--					<label class="custom-control-label" for="darkSwitch">Dark Mode</label>-->
+<!--				</div>-->
+<!--				<script src="./js/dark-mode-switch.js"></script>-->
+			</div>
+		</div>
+	</nav>
+
+  <div class="container mt-3">
+
+		<div class="alert alert-success" role="alert">
+			<h4 class="alert-heading">Cargar encuesta</h4>
+			<p>Abajo podés ir llenando la encuesta. Asegúrate de no sólo puntuar los docentes sino también de en lo posible dejar tu reseña. </p>
+			<hr>
+			<p class="mb-0">Cualquier inconveniente o sugerencia, avisanos por el chat o abre un issue en el <a href="https://github.com/lugfi/dolly" class="alert-link">repositorio de Github</a></p>
+		</div>
+
+    <!-- form -->
+    <form id="form-course">
+      <div class="form-group">
+        <label class="col-form-label" for="cuatri">Cuatrimestre</label>
+        <select id="cuatri" class="custom-select custom-select-lg mb-3">
+          <option value="" hidden >Elija el cuatrimestre</option>
+        </select>
+      </div>
+      <!-- alerts -->
+      <div class="alert alert-warning alert-dismissible collapse" role="alert" id="loading">
+         Estamos cargando los datos, bancá...
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="alert alert-danger alert-dismissible collapse" role="alert" id="load-fail">
+        <strong>¡Problemas de Conexión!</strong> Llamá al nerd más cercano, no puedo bajar los datos del server
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <!-- couse selector -->
+      <div class="form-group collapse" id="course-gruop">
+        <label for="materia" class="col-sm-2 col-form-label">Materia</label>
+        <select id="materia" class="col-sm-12 selectpicker show-tick" data-container="body" data-live-search="true" data-style="btn-primary" title="Elegí la materia" disabled>
+        </select>
+        <label for="curso" class="col-sm-2 col-form-label">Curso</label>
+        <select id="curso" class="col-sm-12 selectpicker show-tick" data-container="body" data-live-search="true" data-style="btn-primary" title="Elegí el curso" disabled>
+        </select>
+      </div>
+    </form>
+
+    <!-- encuesta -->
+    <div id="accordion">
+    </div>
+
+    <!-- send button-->
+    <div id="cardSend" class="card text-white bg-info mb-3 collapse mt-4" style="max-width: 35rem;">
+      <h5 class="card-header">Ya casi estamos</h5>
+      <div class="card-body">
+        <p class="card-text">Podés revisar si todo está bien. Si es así, presioná el botón de abajo. Recordá que tus comentarios deben estar en un lenguaje respetuoso. Cualquier encuesta que no tenga estas características no será tomada en cuenta y se borrará. Por favor, colaboremos con este espacio que nos ayuda a todos de manera coherente.</p>
+        <a href="#" id="sendButton" class="btn btn-light mt-3">Enviar encuesta</a>
+      </div>
+    </div>
+	</div>
+
+
+    <!-- modal -->
+    <div class="modal" tabindex="-1" role="dialog" id="modal-dolly-programa">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body" align="center">
+            <img class="img-fluid" src="./img/ovejas_simpsons.gif" >
+            <p>Más <strike>deliciosa</strike> tierna info en el <a href="https://github.com/lugfi/dolly">repo</a>.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Owww</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" tabindex="-1" role="dialog" id="okModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Encuesta enviada</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Se registraron los datos correctamente, ¡muchas gracias!</p>
+          </div>
+          <div class="modal-footer">
+            <a href="resultados.html" type="button" class="btn btn-primary">Ver Resultados</a>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cargar Otra Encuesta</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" tabindex="-1" role="dialog" id="errorModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Ocurrió un problema</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>No se pudieron registrar los datos, intentá nuevamente más tarde.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" tabindex="-1" role="dialog" id="changeDocenteModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Cambiar Docente</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+          <p>A veces hay errores u omisiones en los listados que publica la Facultad.
+            Si en lugar de <strong class="docentePlace">X</strong> cursaste con otra persona, podés
+            buscar a dicho docente en la lista de abajo:</p>
+            <fieldset>
+              <label for="newDocente" class="col-sm-2 col-form-label">Reemplazo:</label>
+              <select id="newDocente" class="col-sm-7 selectpicker show-tick" data-container="body" data-live-search="true" data-style="btn-primary" title="Buscá tu docente acá">
+              </select>
+              <button class="btn btn-primary col-sm-2" id="changeDocente" disabled>Cambiar</button>
+            </fieldset>
+          </div>
+          <div class="card-footer text-muted">
+             Si este docente está de más o ya lo llenaste previo a un cambio , podes eliminarlo de la encuesta (avisanos por chat quien falta o si esta de más porfa):
+            <fieldset>
+              <button class="btn btn-danger" id="deleteDocente">Eliminar docente</button>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <script>
+  $(function(){
+    // Fill JSON list
+    let html = "";
+    Config.json_list.forEach(function(elem,i){
+      html += '<option value="' + elem.ref + '">' + elem.name + '</option>'
+    });
+    $("#cuatri").append(html);
+    $("#materia").attr("disabled", true);
+    $("#curso").attr("disabled", true);
+
+    // Tooltips and others hooks
+    onDomChange();
+    ChangeDocentes.init();
+    Equivalency.init(function(st){
+      if (st!="success"){
+        $("#load-fail").slideDown(1000);
+      }
+    });
+  });
+
+
+  function onDomChange(){
+    $('[data-toggle="tooltip"]').tooltip();
+  }
+
+  // Triggers
+  $("#cuatri").change(function(e){
+    FormMannager.loadCuatriData($(this).val());
+  });
+
+  $("#materia").change(function(e){
+    FormMannager.loadCursos($(this).val());
+  });
+
+  $("#curso").change(function(e){
+    FormMannager.loadDocentes($(this).val());
+  });
+
+  $("#sendButton").click(function(e){
+    FormMannager.sendForm();
+  });
+
+  Pool.onSubmit = FormMannager.onSubmitForms;
+  </script>
+
+</html>
+

@@ -1,0 +1,1 @@
+doc,mat,cuat,tstamp,asistencia,cumple_horarios,buen_trato,clase_organizada,claridad,fomenta_participacion,panorama_amplio,acepta_critica,responde_mails,comentarios

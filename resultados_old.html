@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+
+  <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1" />
+  <meta http-equiv="Expires" content="0">
+  <meta http-equiv="Last-Modified" content="0">
+  <meta http-equiv="expires" content="3600"/>
+
+  <title>Encuestas de Cursos</title>
+  <meta name="description" content="Sistema Automatizado de Encuestas Fiubenses" />
+  <link rel="icon" type="image/png" href="img/DOLLY_imagen.png">
+  <link rel=”canonical” href=”https://dollyfiuba.com/” />
+
+  <meta property="og:title" content="Dolly" />
+  <meta property="og:description" content="Sistema Automatizado de Encuestas Fiubenses" />
+  <meta property="og:image" content="https://dollyfiuba.com/img/DOLLY_imagen.png" />
+  <meta property="og:url" content="https://dollyfiuba.com/" />
+
+  <link rel="stylesheet" href="./css/bootstrap.min.css"./>
+  <link rel="stylesheet" href="./css/grid-radio.css"./>
+  <script src="./js/jquery-3.3.1.min.js"></script>
+  <script src="./js/jquery.scrollTo.min.js"></script>
+  <script src="./js/jquery.getUrlParam.js"></script>
+
+  <script src="./js/popper.min.js"></script>
+  <script src="./js/bootstrap.min.js"></script>
+
+  <!-- bootstrap-select -->
+  <link rel="stylesheet" href="./css/bootstrap-select.min.css">
+  <script src="./js/bootstrap-select.min.js"></script>
+  <script src="./js/i18n/defaults-es_ES.min.js"></script>
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/7a4568edcb.js" crossorigin="anonymous"></script>
+
+  <!-- custom -->
+  <link rel="stylesheet" href="./css/custom.css"./>
+  <!-- Dark Mode -->
+  <link rel="stylesheet" href="./css/dark-mode.css">
+
+  <!-- Scripts -->
+  <script src="./js/config.js"></script>
+  <script src="./js/utils.js"></script>
+  <script src="./js/results_old.js"></script>
+  <script src="./js/equivalency.js"></script>
+
+  <meta name="theme-color" content="#ffffff">
+  <meta name="mobile-web-app-capable" content="yes">
+
+</head>
+<body>
+	<!-- Navigation -->
+	<nav class="navbar sticky-top navbar-expand-sm navbar-light bg-light justify-content-between">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="/">
+				<img style="width: 35px; height: 35px"  src="./img/DOLLY_imagen.png" width="100">
+				<img style="height: 35px" src="./img/DOLLY_LOGO.png" ></img>
+			</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a href="/" class="nav-link"><i class="fas fa-chart-bar fa-fw"></i> Cargar encuesta</a>
+					</li>
+					<li class="nav-item">
+						<a href="resultados.html" class="nav-link"><i class="fas fa-users fa-fw"></i> Resultados por <b>CURSO</b></a>
+					</li>
+					<li class="nav-item active">
+						<a href="resultados_old.html" class="nav-link"><i class="fas fa-user-graduate fa-fw"></i> Resultados por <b>DOCENTE</b></a>
+					</li>
+<!--					<li class="nav-item">-->
+<!--						<a href="https://fede.dm/FIUBA-Plan/" target="_blank" class="nav-link"><i class="far fa-calendar-alt fa-fw"></i> Organizador de Horarios</a>-->
+<!--					</li>-->
+<!--					<li class="nav-item">-->
+<!--						<a href="#" class="nav-link" data-toggle="modal" data-target="#modal-dolly-programa"><i class="far fa-question-circle fa-fw"></i></a>-->
+<!--					</li>-->
+				</ul>
+<!--				<div class="custom-control custom-switch">-->
+<!--					<input type="checkbox" class="custom-control-input" id="darkSwitch">-->
+<!--					<label class="custom-control-label" for="darkSwitch">Dark Mode</label>-->
+<!--				</div>-->
+<!--				<script src="./js/dark-mode-switch.js"></script>-->
+			</div>
+		</div>
+	</nav>
+
+  <div class="container mt-3">
+    <!-- modal -->
+   <div class="modal" tabindex="-1" role="dialog" id="modal-dolly-programa">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body" align="center">
+            <img class="img-fluid" src="./img/ovejas_simpsons.gif">
+            <p>Más <strike>deliciosa</strike> tierna info en el <a href="https://github.com/lugfi/dolly">repo</a>.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Owww</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="alert alert-danger alert-dismissible collapse" role="alert" id="load-fail">
+      <strong>¡Problemas de Conexión!</strong> Llamá al nerd más cercano, no puedo bajar los datos del server
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="alert alert-info alert-dismissible" role="alert" id="advertencia">
+      Estos son todos los docentes que alguna vez dieron esta materia (que sepamos)
+    </div>
+
+    <div>
+      <label for="materia" class="col-sm-2 col-form-label">Materia</label>
+      <select id="materia" class="col-sm-12 selectpicker show-tick " data-container="body" data-live-search="true" data-style="btn-primary" title="Elegí la materia" disabled> </select>
+    </div>
+
+    <div class="table-responsive mt-3">
+
+      <table class="table cambiante" style="border-collapse:collapse; width: 0 auto;">
+      <thead>
+        <tr>
+          <th class="">Score</th>
+          <th class="">#Resp</th>
+          <th class="">#Com</th>
+          <th class="">Docente</th>
+          <th>
+            <div class="table-header-icons">
+              <span><i class="fas fa-calendar-check puntaje fa-fw cambiante" data-toggle="tooltip" data-placement="bottom" title="Asistencia a clase"></i></span>
+              <span><i class="far fa-clock puntaje fa-fw cambiante" data-toggle="tooltip" data-placement="bottom" title="Cumple los horarios"></i></span>
+              <span><i class="fas fa-sitemap puntaje fa-fw cambiante" data-toggle="tooltip" data-placement="bottom" title="Sus clases están bien organizadas"></i></span>
+              <span><i class="fas fa-glasses puntaje fa-fw cambiante" data-toggle="tooltip" data-placement="bottom" title="Explica con claridad"></i></span>
+              <span><i class="fas fa-heart puntaje fa-fw cambiante" data-toggle="tooltip" data-placement="bottom" title="Mantiene un trato adecuado"></i></span>
+              <span><i class="fas fa-hands-helping puntaje fa-fw cambiante" data-toggle="tooltip" data-placement="bottom" title="Acepta la crítica fundamentada"></i></span>
+              <span><i class="far fa-comments puntaje fa-fw cambiante" data-toggle="tooltip" data-placement="bottom" title="Fomenta la participación"></i></span>
+              <span><i class="far fa-envelope-open puntaje fa-fw cambiante" data-toggle="tooltip" data-placement="bottom" title="Responde por mail o Campus"></i></span>
+              <span><i class="fas fa-star puntaje fa-fw cambiante" data-toggle="tooltip" data-placement="bottom" title="Presenta un panorama amplio"></i></span>
+            </div>
+          </th>
+        </tr>
+
+      </thead>
+      <tbody id="tbody">
+        <tr><td>Contando ovejas...</td></tr>
+      </tbody>
+  </table>
+    </div>
+  </div>
+<script id="chatBroEmbedCode">/* Chatbro Widget Embed Code Start */function ChatbroLoader(chats,async){async=!1!==async;var params={embedChatsParameters:chats instanceof Array?chats:[chats],lang:navigator.language||navigator.userLanguage,needLoadCode:'undefined'==typeof Chatbro,embedParamsVersion:localStorage.embedParamsVersion,chatbroScriptVersion:localStorage.chatbroScriptVersion},xhr=new XMLHttpRequest;xhr.withCredentials=!0,xhr.onload=function(){eval(xhr.responseText)},xhr.onerror=function(){console.error('Chatbro loading error')},xhr.open('GET','//www.chatbro.com/embed.js?'+btoa(unescape(encodeURIComponent(JSON.stringify(params)))),async),xhr.send()}/* Chatbro Widget Embed Code End */ChatbroLoader({encodedChatId: '98FYi'});</script></body>
+</html>
